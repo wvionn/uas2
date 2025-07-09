@@ -1,0 +1,8 @@
+{% extends "index.html" %}
+{% block content %}
+<div style="margin:32px auto 24px auto; padding:24px; background:#f7fff7; border-radius:16px; max-width:400px;">
+    <img src="{{ url_for('static', filename=hasil.gambar) }}" alt="{{ hasil.nama }}" style="max-width:100%; border-radius:12px;">
+    <h2 style="margin-top:12px;">{{ hasil.nama }}</h2>
+    <p>{{ hasil.detail }}</p>
+</div>
+{% endblock %}

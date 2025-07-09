@@ -1,0 +1,203 @@
+{% extends "index.html" %}
+{% block body_class %}darat{% endblock %}
+{% block content %}
+<!-- Form pencarian di kiri atas -->
+<div style="position: absolute; top: 5px; left: 32px; z-index: 10;">
+    <form action="{{ url_for('views.profile') }}" method="get"
+        style="display: flex; align-items: center; background: #fff; border-radius: 32px; box-shadow: 0 2px 12px rgba(39,67,18,0.10); padding: 6px 16px; transition: box-shadow 0.2s;">
+        <span style="display: flex; align-items: center; margin-right: 8px; color: #6c8b5b; font-size: 1.3rem;">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="7" />
+                <line x1="16.5" y1="16.5" x2="21" y2="21" />
+            </svg>
+        </span>
+        <input type="text" name="q" placeholder="Cari hewan purba..."
+            style="border: none; outline: none; background: transparent; font-size: 1rem; padding: 8px 4px; width: 180px; color: #2d3a23;">
+        <button type="submit"
+            style="background: linear-gradient(90deg, #6c8b5b 60%, #b6e2a1 100%); color: #fff; border: none; border-radius: 24px; padding: 8px 18px; margin-left: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; box-shadow: 0 2px 8px rgba(108,139,91,0.10); transition: background 0.2s;">
+            Cari
+        </button>
+    </form>
+</div>
+
+<h1 style="
+        text-align: center;
+        font-size: 3rem;
+        font-weight: 900;
+        letter-spacing: 2px;
+        margin-top: 40px;
+        margin-bottom: 28px;
+        background: linear-gradient(90deg, #24511c 0%, #3e7d2c 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow:
+            0 2px 8px #3e7d2c;
+        font-family: 'Segoe UI', 'Arial Black', Arial, sans-serif;
+    ">
+    Hewan Purba Darat
+</h1>
+<div style="display: flex; gap: 32px; margin-top: 32px; justify-content: center;">
+    <div id="cards-container" style="display: flex; flex-wrap: wrap; gap: 24px; max-width: 1200px;">
+        {% set cards = [
+        ['Plateosaurus', 'plateosaurus.jpg', 'Herbivora besar dengan leher panjang dan tubuh ramping. Bisa berjalan
+        dengan dua kaki dan hidup di dataran kering.'],
+        ['Herrerasaurus', 'herrerasaurus.jpg', 'Salah satu karnivora tertua, kecil dan gesit. Memiliki gigi tajam dan
+        cakar kuat untuk berburu.'],
+        ['Coelophysis', 'coelophysis.jpg', 'Dinosaurus ramping dan cepat, hidup berkelompok. Fosilnya ditemukan dalam
+        jumlah besar di Amerika Utara.'],
+        ['Eoraptor', 'eoraptor.jpg', 'Salah satu dinosaurus pertama yang diketahui, berukuran kecil. Hidup di Amerika
+        Selatan sekitar 231 juta tahun lalu.'],
+        ['Heterodontosaurus', 'heterodontosaurus.jpg', 'Herbivora kecil dengan tiga jenis gigi berbeda. Tubuhnya ringan
+        dan bisa berlari cepat.'],
+        ['Brachiosaurus', 'brachiosaurus.jpg', 'Dinosaurus raksasa dengan kaki depan lebih panjang dari belakang.
+        Lehernya tinggi untuk menjangkau daun di pohon besar.'],
+        ['Stegosaurus', 'stegosaurus.jpg', 'Memiliki pelat tulang besar di punggung dan ekor berduri. Otaknya kecil
+        dibandingkan ukuran tubuhnya.'],
+        ['Diplodocus', 'diplodocus.jpg', 'Salah satu dinosaurus terpanjang dengan ekor seperti cambuk. Makan tumbuhan
+        rendah di hutan purba.'],
+        ['Allosaurus', 'allosaurus.jpg', 'Predator utama zaman Jura dengan rahang besar dan gigi tajam. Sering berburu
+        dalam kelompok.'],
+        ['Camarasaurus', 'camarasaurus.jpg', 'Herbivora besar dengan gigi kuat dan kepala bulat. Sering ditemukan dalam
+        fosil berkelompok.'],
+        ['Apatosaurus', 'apatosaurus.jpg', 'Sauropoda besar dengan ekor panjang dan leher kuat. Sering disalahartikan
+        sebagai Brontosaurus.'],
+        ['Ceratosaurus', 'ceratosaurus.jpg', 'Karnivora bertanduk dengan tubuh ramping. Hidup di Amerika Utara dan
+        Eropa.'],
+        ['Megalosaurus', 'megalosaurus.jpg', 'Dinosaurus karnivora pertama yang dinamai secara ilmiah. Hidup di awal
+        zaman Jura.'],
+        ['Dilophosaurus', 'dilophosaurus.jpg', 'Memiliki dua jambul di kepala dan tubuh ramping. Hidup di awal Jura dan
+        mungkin berburu dalam kelompok.'],
+        ['Monolophosaurus', 'monolophosaurus.jpg', 'Punya satu jambul di tengkoraknya. Hidup di Asia dan termasuk
+        predator menengah.'],
+        ['Tyrannosaurus rex', 'trex.jpg', 'Predator legendaris dengan gigitan terkuat dalam sejarah. Hidup di akhir
+        zaman Kapur di Amerika Utara.'],
+        ['Triceratops', 'triceratops.jpg', 'Herbivora bertanduk tiga dengan pelindung kepala besar. Sering digambarkan
+        bertarung melawan T-Rex.'],
+        ['Ankylosaurus', 'ankylosaurus.jpg', 'Dinosaurus lapis baja dengan ekor seperti gada. Tubuhnya rendah dan sangat
+        terlindungi.'],
+        ['Iguanodon', 'iguanodon.jpg', 'Herbivora dengan jempol berduri dan paruh lebar. Bisa berjalan dengan dua atau
+        empat kaki.'],
+        ['Parasaurolophus', 'parasaurolophus.jpg', 'Memiliki jambul panjang melengkung di kepala. Diperkirakan digunakan
+        untuk menghasilkan suara.'],
+        ['Pachycephalosaurus', 'pachycephalosaurus.jpg', 'Tengkoraknya sangat tebal, mungkin digunakan untuk adu kepala.
+        Hidup di akhir zaman Kapur.'],
+        ['Maiasaura', 'maiasaura.jpg', 'Dikenal karena merawat anak-anaknya di sarang. Hidup berkoloni dan makan
+        tumbuhan.'],
+        ['Amargasaurus', 'amargasaurus.jpg', 'Lehernya dihiasi deretan duri panjang. Hidup di Amerika Selatan pada awal
+        Kapur.'],
+        ['Sauropelta', 'sauropelta.jpg', 'Herbivora lapis baja dengan duri besar di punggung. Tubuhnya rendah dan
+        berat.'],
+        ['Edmontosaurus', 'edmontosaurus.jpg', 'Hadrosaur besar dengan paruh bebek. Hidup di Amerika Utara dan sering
+        ditemukan dalam fosil massal.'],
+        ['Corythosaurus', 'corythosaurus.jpg', 'Memiliki jambul mirip helm di kepalanya. Diperkirakan bisa menghasilkan
+        suara keras.'],
+        ['Ouranosaurus', 'ouranosaurus.jpg', 'Punggungnya memiliki layar tulang yang mencolok. Mungkin digunakan untuk
+        mengatur suhu tubuh.'],
+        ['Dryosaurus', 'dryosaurus.jpg', 'Herbivora kecil dan cepat, hidup di hutan terbuka. Giginya cocok untuk
+        mengunyah daun lunak.'],
+        ['Tenontosaurus', 'tenontosaurus.jpg', 'Bertubuh sedang dan sering ditemukan bersama fosil predator. Hidup di
+        awal zaman Kapur.'],
+        ['Carnotaurus', 'carnotaurus.jpg', 'Bertanduk dan punya lengan sangat kecil. Tubuhnya ramping dan bisa berlari
+        cepat.'],
+        ['Spinosaurus', 'spinosaurus.jpg', 'Dinosaurus semi-akuatik dengan layar besar di punggung. Diperkirakan pemakan
+        ikan.'],
+        ['Giganotosaurus', 'giganotosaurus.jpg', 'Lebih besar dari T-Rex dan hidup di Amerika Selatan. Memiliki
+        tengkorak besar dan gigi tajam.'],
+        ['Albertosaurus', 'albertosaurus.jpg', 'Sepupu T-Rex yang lebih kecil dan lebih ringan. Hidup di Amerika
+        Utara.'],
+        ['Acrocanthosaurus', 'acrocanthosaurus.jpg', 'Punggungnya memiliki tonjolan tulang tinggi. Hidup di Amerika
+        Utara.'],
+        ['Baryonyx', 'baryonyx.jpg', 'Pemakan ikan dengan cakar besar di tangan. Ditemukan di Inggris.'],
+        ['Troodon', 'troodon.jpg', 'Salah satu dinosaurus paling cerdas dengan otak besar. Giginya tajam dan
+        bergerigi.'],
+        ['Daspletosaurus', 'daspletosaurus.jpg', 'Mirip T-Rex tapi lebih kecil dan lebih tua. Hidup di Amerika Utara.'],
+        ['Majungasaurus', 'majungasaurus.jpg', 'Predator dari Madagaskar dengan tengkorak unik. Diduga melakukan
+        kanibalisme.'],
+        ['Tarbosaurus', 'tarbosaurus.jpg', 'T-Rex versi Asia, hidup di Mongolia. Memiliki rahang kuat dan tubuh
+        besar.'],
+        ['Archaeoceratops', 'archaeoceratops.jpg', 'Herbivora kecil dengan pelindung kepala. Hidup di Asia dan termasuk
+        kerabat awal Triceratops.']
+        ] %}
+        {% for nama, gambar, deskripsi in cards %}
+        <div onclick="showDetail('{{ nama }}', '{{ gambar }}')"
+            style="cursor:pointer; background: #f7fff7; border-radius: 16px; box-shadow: 0 4px 16px rgba(39,67,18,0.13); width: 220px; padding: 18px; display: flex; flex-direction: column; align-items: center;">
+            <img src="{{ url_for('static', filename=gambar) }}" alt="{{ nama }}"
+                style="max-width: 90%; border-radius: 12px;">
+            <div class="nama-hewan darat" style="margin-top: 10px;">{{ nama }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- Detail Panel -->
+    <div id="detail-panel"
+        style="flex:1; min-width:500px; max-width:900px; background:#f7fff7; border-radius:16px; box-shadow:0 4px 16px rgba(39,67,18,0.13); padding:32px; margin-left:16px; display:none; position:relative;">
+        <button onclick="closeDetail()"
+            style="position:absolute; top:16px; right:16px; background:transparent; border:none; font-size:2rem; cursor:pointer;">&times;</button>
+        <div style="display: flex; gap: 32px; align-items: flex-start;">
+            <img id="detail-img" src="" alt="" style="max-width:260px; border-radius:12px; flex-shrink:0;">
+            <div style="display: flex; flex-direction: column; align-items: flex-start; min-width:220px;">
+                <h2 id="detail-title" style="margin-top:0; margin-bottom:12px; text-align:left;"></h2>
+                <div id="detail-extra" style="color:#2d3a23; font-size:1.08rem; text-align:left;"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const extraInfo = {
+"Plateosaurus": "<b>Zaman:</b> Akhir Trias (~214 juta tahun lalu).<br/><b>Sejarah:</b> Plateosaurus adalah salah satu dinosaurus pertama yang ditemukan di Eropa dan menjadi ikon awal paleontologi. Fosilnya banyak ditemukan di Jerman, Swiss, dan Prancis. Plateosaurus hidup di dataran banjir dan hutan terbuka, memakan tumbuhan rendah dan tinggi berkat lehernya yang panjang.<br/><b>Fun fact:</b> Plateosaurus bisa tumbuh hingga 10 meter dan berat 4 ton, serta mampu berjalan dengan dua atau empat kaki.",
+"Herrerasaurus": "<b>Zaman:</b> Akhir Trias (~231 juta tahun lalu).<br><b>Sejarah:</b> Herrerasaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Herrerasaurus adalah salah satu karnivora tertua dan sangat gesit.",
+"Coelophysis": "<b>Zaman:</b> Akhir Trias (~203 juta tahun lalu).<br><b>Sejarah:</b> Coelophysis adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Fosil Coelophysis ditemukan dalam jumlah ribuan di satu lokasi.",
+"Eoraptor": "<b>Zaman:</b> Akhir Trias (~231 juta tahun lalu).<br><b>Sejarah:</b> Eoraptor adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Eoraptor adalah salah satu dinosaurus paling awal yang pernah ditemukan.",
+"Heterodontosaurus": "<b>Zaman:</b> Awal Jurassic (~200 juta tahun lalu).<br><b>Sejarah:</b> Heterodontosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Memiliki tiga jenis gigi berbeda dalam satu mulut.",
+"Brachiosaurus": "<b>Zaman:</b> Jurassic Akhir (~154-153 juta tahun lalu).<br><b>Sejarah:</b> Brachiosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Kaki depan Brachiosaurus lebih panjang dari kaki belakangnya.",
+"Stegosaurus": "<b>Zaman:</b> Jurassic Akhir (~155-150 juta tahun lalu).<br><b>Sejarah:</b> Stegosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Otak Stegosaurus sangat kecil dibandingkan tubuhnya.",
+"Diplodocus": "<b>Zaman:</b> Jurassic Akhir (~154-152 juta tahun lalu).<br><b>Sejarah:</b> Diplodocus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Ekor Diplodocus bisa digunakan seperti cambuk.",
+"Allosaurus": "<b>Zaman:</b> Jurassic Akhir (~155-145 juta tahun lalu).<br><b>Sejarah:</b> Allosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Allosaurus adalah predator utama di zamannya.",
+"Camarasaurus": "<b>Zaman:</b> Jurassic Akhir (~155-145 juta tahun lalu).<br><b>Sejarah:</b> Camarasaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Nama Camarasaurus berarti 'kadal berongga' karena tulang belakangnya berlubang.",
+"Apatosaurus": "<b>Zaman:</b> Jurassic Akhir (~152-151 juta tahun lalu).<br><b>Sejarah:</b> Apatosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Ekor Apatosaurus bisa menghasilkan suara keras seperti cambuk.",
+"Ceratosaurus": "<b>Zaman:</b> Jurassic Akhir (~153-148 juta tahun lalu).<br><b>Sejarah:</b> Ceratosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Ceratosaurus punya tanduk di hidungnya.",
+"Megalosaurus": "<b>Zaman:</b> Jurassic Tengah (~166 juta tahun lalu).<br><b>Sejarah:</b> Megalosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Megalosaurus adalah dinosaurus pertama yang dideskripsikan secara ilmiah.",
+"Dilophosaurus": "<b>Zaman:</b> Jurassic Awal (~193 juta tahun lalu).<br><b>Sejarah:</b> Dilophosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Memiliki dua jambul di kepalanya.",
+"Monolophosaurus": "<b>Zaman:</b> Jurassic Tengah (~165 juta tahun lalu).<br><b>Sejarah:</b> Monolophosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Memiliki satu jambul besar di tengkoraknya.",
+"Tyrannosaurus rex": "<b>Zaman:</b> Kapur Akhir (~68-66 juta tahun lalu).<br><b>Sejarah:</b> Tyrannosaurus rex adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Gigi T-Rex bisa sepanjang 30 cm.",
+"Triceratops": "<b>Zaman:</b> Kapur Akhir (~68-66 juta tahun lalu).<br><b>Sejarah:</b> Triceratops adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Triceratops punya tiga tanduk besar di kepalanya.",
+"Ankylosaurus": "<b>Zaman:</b> Kapur Akhir (~68-66 juta tahun lalu).<br><b>Sejarah:</b> Ankylosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Ekor Ankylosaurus seperti gada besar untuk bertahan.",
+"Iguanodon": "<b>Zaman:</b> Kapur Awal (~126-113 juta tahun lalu).<br><b>Sejarah:</b> Iguanodon adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Iguanodon punya jempol berduri unik.",
+"Parasaurolophus": "<b>Zaman:</b> Kapur Akhir (~76-73 juta tahun lalu).<br><b>Sejarah:</b> Parasaurolophus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Jambul Parasaurolophus bisa menghasilkan suara keras.",
+"Pachycephalosaurus": "<b>Zaman:</b> Kapur Akhir (~70-66 juta tahun lalu).<br><b>Sejarah:</b> Pachycephalosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Tengkoraknya sangat tebal, bisa untuk adu kepala.",
+"Maiasaura": "<b>Zaman:</b> Kapur Akhir (~76-74 juta tahun lalu).<br><b>Sejarah:</b> Maiasaura adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Maiasaura dikenal sebagai 'ibu kadal baik' karena merawat anaknya.",
+"Amargasaurus": "<b>Zaman:</b> Kapur Awal (~129-122 juta tahun lalu).<br><b>Sejarah:</b> Amargasaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Amargasaurus punya deretan duri panjang di leher.",
+"Sauropelta": "<b>Zaman:</b> Kapur Awal (~108-104 juta tahun lalu).<br><b>Sejarah:</b> Sauropelta adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Duri punggung Sauropelta bisa mencapai 50 cm.",
+"Edmontosaurus": "<b>Zaman:</b> Kapur Akhir (~73-66 juta tahun lalu).<br><b>Sejarah:</b> Edmontosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Edmontosaurus bisa tumbuh hingga 12 meter dan berat 4 ton.",
+"Corythosaurus": "<b>Zaman:</b> Kapur Akhir (~77-75 juta tahun lalu).<br><b>Sejarah:</b> Corythosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Jambul Corythosaurus mirip helm prajurit Yunani.",
+"Ouranosaurus": "<b>Zaman:</b> Kapur Awal (~125-112 juta tahun lalu).<br><b>Sejarah:</b> Ouranosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Ouranosaurus punya layar tulang di punggungnya.",
+"Dryosaurus": "<b>Zaman:</b> Jurassic Akhir (~155-145 juta tahun lalu).<br><b>Sejarah:</b> Dryosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Dryosaurus sangat cepat dan lincah.",
+"Tenontosaurus": "<b>Zaman:</b> Kapur Awal (~115-108 juta tahun lalu).<br><b>Sejarah:</b> Tenontosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Sering ditemukan bersama fosil Deinonychus.",
+"Carnotaurus": "<b>Zaman:</b> Kapur Akhir (~72-69 juta tahun lalu).<br><b>Sejarah:</b> Carnotaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Carnotaurus punya dua tanduk di atas matanya.",
+"Spinosaurus": "<b>Zaman:</b> Kapur Akhir (~99-93 juta tahun lalu).<br><b>Sejarah:</b> Spinosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Spinosaurus adalah dinosaurus pemakan ikan terbesar.",
+"Giganotosaurus": "<b>Zaman:</b> Kapur Akhir (~99-97 juta tahun lalu).<br><b>Sejarah:</b> Giganotosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Giganotosaurus lebih besar dari T-Rex.",
+"Albertosaurus": "<b>Zaman:</b> Kapur Akhir (~70-68 juta tahun lalu).<br><b>Sejarah:</b> Albertosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Sering ditemukan dalam kelompok besar.",
+"Acrocanthosaurus": "<b>Zaman:</b> Kapur Awal (~115-105 juta tahun lalu).<br><b>Sejarah:</b> Acrocanthosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Memiliki tonjolan tulang tinggi di punggungnya.",
+"Baryonyx": "<b>Zaman:</b> Kapur Awal (~130-125 juta tahun lalu).<br><b>Sejarah:</b> Baryonyx adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Cakar Baryonyx bisa sepanjang 31 cm.",
+"Troodon": "<b>Zaman:</b> Kapur Akhir (~77-70 juta tahun lalu).<br><b>Sejarah:</b> Troodon adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Troodon diduga sangat cerdas dan punya penglihatan malam.",
+"Daspletosaurus": "<b>Zaman:</b> Kapur Akhir (~77-74 juta tahun lalu).<br><b>Sejarah:</b> Daspletosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Namanya berarti 'kadal mengerikan'.",
+"Majungasaurus": "<b>Zaman:</b> Kapur Akhir (~70-66 juta tahun lalu).<br><b>Sejarah:</b> Majungasaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Majungasaurus diduga melakukan kanibalisme.",
+"Tarbosaurus": "<b>Zaman:</b> Kapur Akhir (~70-66 juta tahun lalu).<br><b>Sejarah:</b> Tarbosaurus adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Tarbosaurus adalah kerabat dekat T-Rex dari Asia.",
+"Archaeoceratops": "<b>Zaman:</b> Kapur Awal (~125-112 juta tahun lalu).<br><b>Sejarah:</b> Archaeoceratops adalah dinosaurus penting yang ditemukan di wilayah berbeda dengan karakteristik unik. Penemuan ini memperluas pemahaman ilmiah kita tentang keragaman dinosaurus yang hidup pada zaman tersebut. Ciri khas spesies ini juga membantu para ilmuwan menghubungkan evolusi antara berbagai jenis hewan purba.<br><b>Fun fact:</b> Salah satu ceratopsian paling awal yang diketahui.",
+        };
+
+        function showDetail(nama, gambar) {
+            document.getElementById('cards-container').style.display = 'none';
+            const panel = document.getElementById('detail-panel');
+            panel.style.display = 'block';
+            document.getElementById('detail-img').src = '/static/' + gambar;
+            document.getElementById('detail-img').alt = nama;
+            document.getElementById('detail-title').innerText = nama;
+            document.getElementById('detail-extra').innerHTML = extraInfo[nama] || "";
+        }
+
+        function closeDetail() {
+            document.getElementById('detail-panel').style.display = 'none';
+            document.getElementById('cards-container').style.display = 'flex';
+        }
+    </script>
+    {% endblock %}

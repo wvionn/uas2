@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Jejak Hewan Purba</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: url("{{ url_for('static', filename='cover.jpeg') }}") no-repeat center center;
+            background-size: auto;
+            color: white;
+        }
+        .overlay {
+            
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 4em;
+            margin-bottom: 0.2em;
+        }
+        
+        p {
+            font-size: 1.3em;
+            max-width: 600px;
+            margin-bottom: 1.5em;
+        }
+        
+        .btn {
+            background-color: #cc7a2b;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background-color: #b56622;
+        }
+        
+        
+        </style>
+</head>
+
+<body>
+    <div class="overlay">
+        <h1>Jejak<br>Hewan Purba</h1>
+        <p>Dari dasar laut terdalam hingga puncak daratan,<br>jelajahi dunia hewan purba yang menakjubkan</p>
+        <form action="{{ url_for('views.pilih_hewan') }}">
+            <button class="btn" type="submit">Eksplor Sekarang</button>
+        </form>
+
+    </div>
+</body>
+
+</html>

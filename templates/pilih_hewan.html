@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pilih Kategori Hewan Purba</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='cardspilih.css') }}">
+</head>
+
+<body style="margin: 0; font-family: sans-serif;">
+<!-- Cards pilihan -->
+<div class="cards-row" style="display: flex; justify-content: flex-start; gap: 24px; margin-top: 20px; padding-left: 32px;">
+    <!-- Card Laut -->
+    <div class="card-pilihan laut" style="width: 200px; text-align: center;">
+        <img src="{{ url_for('static', filename='mosasaurus.jpeg') }}" alt="Hewan Purba Laut"
+            style="width: 100%; border-radius: 12px;">
+        <form action="{{ url_for('views.kumpulan_laut') }}">
+            <button class="btn" type="submit" style="margin-top: 8px; width: 100%;">Hewan Purba Laut</button>
+        </form>
+    </div>
+
+    <!-- Card Darat -->
+    <div class="card-pilihan darat" style="width: 200px; text-align: center;">
+        <img src="{{ url_for('static', filename='trex.jpeg') }}" alt="Hewan Purba Darat"
+            style="width: 100%; border-radius: 12px;">
+        <form action="{{ url_for('views.kumpulan_darat') }}">
+            <button class="btn darat" type="submit" style="margin-top: 8px; width: 100%;">Hewan Purba Darat</button>
+        </form>
+    </div>
+</div>
+
+
+  <!-- Mesin Rahasia tetap di kanan atas -->
+<div id="funfact-floating-box" style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 240px;
+    background: rgba(255,255,255,0.15);
+    padding: 12px;
+    border-radius: 10px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    z-index: 1000;
+    font-size: 13px;
+    color: #1d3921;
+">
+    <h3 style="margin-top: 0; color: #24511c; font-size: 14px;">Mesin Rahasia Hewan Purba (Berisi Funfact)</h3>
+    <button onclick="showRandomFact()" style="
+        margin-top: 4px;
+        padding: 6px 12px;
+        background: #5da371;
+        border: none;
+        border-radius: 6px;
+        color: white;
+        cursor: pointer;
+        font-size: 12px;
+    ">Klik 🔍</button>
+    <div id="funfact-box" style="margin-top: 8px; font-style: italic;"></div>
+</div>
+
+
+    <!-- Timeline Section -->
+    <div class="timeline-section" style="
+        max-width: 600px;
+        margin: 24px auto;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        font-size: 14px;
+    ">
+
+        <h2 style="text-align:center; margin-bottom: 12px;">🕰️ Jelajahi Zaman Purba</h2>
+
+        <!-- Dino slider -->
+        <div id="dino-slider-container" style="position: relative; height: 60px; margin-bottom: 8px;">
+            <img id="dino-slider-img" src="{{ url_for('static', filename='img/trilobite.jpg') }}" alt="Dino kecil"
+                style="position: absolute; left: 0; top: 0; width: 40px; height: 40px; transition: left 0.4s ease; z-index:2;">
+            <div
+                style="position: absolute; left: 0; right: 0; top: 20px; height: 12px; background: linear-gradient(90deg, #b6e2a1, #e0f7fa); border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); z-index:1;">
+            </div>
+        </div>
+
+        <label for="timeline" style="font-weight:600; color:#24511c;">Pilih Zaman:</label>
+        <input type="range" id="timeline" min="1" max="5" value="1" step="1"
+            data-imgbase="{{ url_for('static', filename='img/') }}"
+            style="width: 100%; margin-top: 6px; background: transparent; position: relative; z-index:3;">
+        <div id="zaman-info" style="margin-top: 10px;"></div>
+        <div id="hewan-gambar"></div>
+
+
+
+        <!-- Script Fun Fact -->
+        <script>
+            const funFacts = [
+                "Trilobite punya mata dengan ribuan lensa seperti kamera serangga modern.",
+                "Spinosaurus bisa jadi perenang terbaik di antara dinosaurus!",
+                "Beberapa Ammonite punya rumah spiral yang mirip rumah keong zaman sekarang.",
+                "Plesiosaurus punya leher panjang yang absurd banget, bisa lebih dari setengah panjang tubuhnya.",
+                "Ichthyosaurus mirip banget dengan lumba-lumba modern meskipun bukan mamalia.",
+                "Trilobite adalah salah satu hewan pertama yang punya penglihatan kompleks.",
+                "Megalodon bisa mencapai panjang hingga 18 meter kayak bus level boss!",
+                "Beberapa dinosaurus punya bulu, bukan cuma sisik. Fashion zaman purba!",
+                "Velociraptor lebih kecil dari yang di film, seukuran kalkun. Tapi tetap serem.",
+                "Fosil pertama pterosaurus ditemukan sebelum orang tahu dinosaurus itu apa.",
+                "Dinosaurus yang paling cepat kemungkinan adalah Ornithomimus, bisa lari 70 km/jam.",
+                "Belemnit adalah cumi-cumi zaman purba yang punya cangkang dalam.",
+                "Dino laut Elasmosaurus punya leher yang hampir sepanjang tubuhnya.",
+                "Ammonite bisa memiliki cangkang yang berdiameter lebih dari 2 meter.",
+                "Pachycephalosaurus punya tengkorak super tebal buat headbutt sesama jomblo purba.",
+                "Beberapa trilobite bisa menggulung tubuhnya kayak kelabang.",
+                "Fosil trilobite ditemukan di hampir seluruh dunia, bahkan di Antartika!",
+                "Tiktaalik adalah ikan purba yang punya sirip mirip tangan. Evolusi mulai ngide.",
+                "Fosil hewan purba bisa terbentuk dari tulang, jejak kaki, bahkan kotorannya!",
+                "Beberapa dinosaurus punya gigi yang terus tumbuh seperti hiu modern.",
+                "Brachiosaurus bisa makan sampai 400 kg daun per hari. Makan mulu gak kenyang.",
+                "Dunkleosteus adalah predator laut zaman Devon yang punya rahang super kuat.",
+                "Ada ubur-ubur purba yang fosilnya ditemukan walau tubuhnya lunak.",
+                "Coelacanth sempat dianggap punah selama jutaan tahun, eh ternyata masih hidup.",
+                "Pterosaurus Quetzalcoatlus punya bentang sayap selebar bus. Literally flying bus.",
+                "Fosil gigi Megalodon sering ditemukan di dasar laut dan koleksi museum.",
+                "Stegosaurus punya otak seukuran kacang walau tubuhnya gede banget.",
+                "Beberapa trilobite punya 'antenna' kecil buat deteksi lingkungan.",
+                "Banyak hewan purba hidup di laut dangkal tropis zaman dulu yang sekarang jadi gurun.",
+                "Beberapa dinosaurus jantan punya jambul hiasan buat tarik perhatian betina.",
+                "Fosil hewan purba sering ditemukan karena tertimbun lumpur pas banjir zaman dulu.",
+                "Fosil bisa terbentuk dari jejak kaki yang jadi keras dan membatu seiring waktu.",
+                "Nautilus modern mirip banget dengan ammonite purba, tapi mereka bukan saudara dekat.",
+                "Anomalocaris punya mata majemuk terbesar di zamannya. Insect mode: unlocked.",
+                "Beberapa dinosaurus herbivora punya ekor berduri buat melindungi diri.",
+                "Mosasaurs adalah kadal laut purba yang bisa makan apa aja, bahkan dino laut lain.",
+                "Fosil amber (getah membatu) bisa menyimpan serangga purba dengan sangat detail.",
+                "Trilobite ada yang punya duri-duri tajam di tubuhnya buat perlindungan.",
+                "Beberapa pterosaurus punya jambul kepala super panjang yang aneh banget.",
+                "Fosil pertama dinosaurus ditemukan tahun 1824 di Inggris. Hello Dino!",
+                "Arthropleura adalah kelabang raksasa purba sepanjang 2 meter.",
+                "Beberapa hewan purba laut bisa regenerasi bagian tubuh kayak bintang laut modern.",
+                "Fosil tulang ditemukan lebih sering daripada fosil daging atau kulit.",
+                "Dinosaurus bukanlah satu jenis, tapi ribuan spesies berbeda yang hidup jutaan tahun.",
+                "Ichthyosaurus melahirkan anak, bukan bertelur. Iya, kayak paus!",
+                "Gigi Megalodon bisa sebesar tangan manusia dewasa.",
+                "Plesiosaurus mungkin tidak bisa mengangkat lehernya kayak di film. Busted!",
+                "Trilobite adalah salah satu hewan paling sukses secara evolusi: hidup lebih dari 270 juta tahun.",
+                "Fosil menunjukkan bahwa beberapa dinosaurus bersarang dan merawat anaknya.",
+                "Dimetrodon sering disangka dinosaurus, padahal dia hidup sebelum dinosaurus muncul.",
+                "Beberapa fosil ditemukan dengan sisa makanan terakhir di perutnya!",
+                "Fosil dino ditemukan di gurun Gobi, salah satu spot paling ikonik buat fosil.",
+                "Beberapa spesies trilobite bisa melihat dalam gelap total.",
+                "Dinosaurus bisa bersin? Gak tahu pasti, tapi pasti epic.",
+                "Trilobite punya 3 bagian tubuh utama: cephalon, thorax, dan pygidium.",
+                "Fosil Ammonite kadang jadi perhiasan karena bentuknya estetik.",
+                "Sauroposeidon mungkin dino tertinggi yang pernah ada, tingginya bisa 17 meter.",
+                "Dino predator biasanya punya gigi tajam, sementara herbivora punya gigi pipih.",
+                "Fosil jejak kaki bisa menunjukkan gerombolan hewan jalan bareng!",
+                "Beberapa hewan purba punya exoskeleton keras yang bantu jadi fosil.",
+                "Fosil Trilobite pertama ditemukan tahun 1698!",
+                "Dino air tidak termasuk dalam kelompok dinosaurus secara ilmiah.",
+                "Ada bintang laut purba yang bentuknya hampir gak berubah sampai sekarang.",
+                "Fosil bisa terbentuk dari getah pohon, es, bahkan aspal!",
+                "Kepik purba pernah terperangkap dalam getah dan membatu selama jutaan tahun.",
+                "Ankylosaurus punya 'armor' alami dan palu di ekornya. Total tank!",
+                "Fosil pterosaurus menunjukkan tulangnya ringan tapi kuat.",
+                "Ada ikan purba yang giginya seperti gergaji bundar. Nama kerennya: Helicoprion.",
+                "Sebagian besar fosil dino ditemukan dalam posisi 'death pose'. Leher melengkung ke belakang.",
+                "Banyak dinosaurus punya lubang di tengkoraknya untuk meringankan beban kepala.",
+                "Trilobite bisa hidup di laut dangkal dan dalam.",
+                "Fosil Ammonite ditemukan di berbagai negara, dari Eropa sampai Asia.",
+                "Pterosaurus tidak punya bulu, tapi beberapa punya semacam rambut halus.",
+                "Ada dino yang bernama \"Irritator\" karena fosilnya bikin frustrasi ilmuwan.",
+                "Fosil hewan purba bisa bantu ilmuwan tahu kondisi iklim masa lalu.",
+                "Fosil ditemukan pertama kali oleh manusia ribuan tahun lalu, sebelum tahu itu apa.",
+                "Fosil bisa mengandung warna asli hewan purba, tapi sangat langka.",
+                "Ada dino yang bernama \"Dracorex\" karena mirip naga dari legenda.",
+                "Ammonite berkembang sangat cepat, umur mereka pendek tapi produktif.",
+                "Trilobite adalah simbol waktu geologi Paleozoikum.",
+                "Dino terbang paling kecil adalah Nemicolopterus – bentang sayapnya cuma 25 cm.",
+                "Tulang dino bisa penuh kantong udara seperti burung modern.",
+                "Beberapa spesies dino bisa hidup sampai 80–100 tahun!",
+                "T-Rex punya penglihatan yang lebih bagus dari elang.",
+                "Fosil menunjukkan bahwa beberapa dinosaurus bisa menderita penyakit tulang.",
+                "Trilobite punah pada kepunahan massal akhir Permian.",
+                "Sebagian besar fosil ditemukan secara nggak sengaja oleh petani atau penambang.",
+                "Beberapa pterosaurus bisa terbang ribuan kilometer tanpa berhenti.",
+                "Fosil bisa rusak karena erosi sebelum digali. Kasian gak jadi terkenal.",
+                "Beberapa trilobite punya pola unik di punggungnya – kaya batik purba.",
+                "Paleontolog bisa tahu umur fosil dengan menghitung lapisan batuan.",
+                "Dino herbivora suka hidup berkelompok untuk perlindungan.",
+                "Fosil ditemukan di dalam batu kapur, serpih, atau pasir batu.",
+                "Beberapa predator purba punya taring gergaji – efektif dan serem!",
+                "Kerang purba kadang ditemukan menempel di fosil hewan lain.",
+                "Beberapa dinosaurus bisa punya lebih dari 500 gigi sepanjang hidupnya.",
+                "Plesiosaurus mungkin menyergap mangsanya dari bawah.",
+                "Beberapa trilobite punya pola \"tatakan teh\" di tubuhnya. Literally aesthetic.",
+                "Fosil gigi dinosaurus lebih mudah ditemukan daripada tulangnya.",
+                "Fosil membantu manusia memahami sejarah bumi hingga 4,6 miliar tahun lalu!"
+            ];
+
+            function showRandomFact() {
+                const index = Math.floor(Math.random() * funFacts.length);
+                document.getElementById('funfact-box').innerText = funFacts[index];
+            }
+        </script>
+
+        <!-- Script lainnya -->
+        <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+
+</body>
+
+</html>

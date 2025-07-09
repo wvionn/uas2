@@ -1,0 +1,23 @@
+{% extends "index.html" %}
+{% block content %}
+
+<!-- Form pencarian di kiri atas -->
+<div style="position: absolute; top: 24px; left: 24px; z-index: 10;">
+    <form action="{{ url_for('views.profile') }}" method="get">
+        <input type="text" name="q" placeholder="Cari hewan purba..." style="padding:6px; border-radius:6px;">
+        <button type="submit" style="padding:6px 12px; border-radius:6px;">Cari</button>
+    </form>
+</div>
+
+<!-- Hasil pencarian -->
+{% if hasil %}
+<div style="margin:32px 0 24px 0; padding:24px; background:#f7fff7; border-radius:16px; max-width:400px;">
+    <img src="{{ url_for('static', filename=hasil.gambar) }}" alt="{{ hasil.nama }}" style="max-width:100%; border-radius:12px;">
+    <h2 style="margin-top:12px;">{{ hasil.nama }}</h2>
+    <p>{{ hasil.detail }}</p>
+</div>
+{% endif %}
+
+
+
+{% endblock %}

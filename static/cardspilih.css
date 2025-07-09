@@ -1,0 +1,160 @@
+body {
+    background-color: rgba(0, 0, 0, 0.04);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: url("/static/blur.jpg") no-repeat center center;
+    background-size: auto;
+}
+
+.timeline-section {
+    width: 100%;
+    max-width: 600px;
+    background: #e0f7fa;
+    border-radius: 18px;
+    box-shadow: 0 4px 18px 0 rgba(30, 58, 95, 0.13);
+    padding: 32px 24px 24px 24px;
+    margin-bottom: 38px;
+    text-align: center;
+}
+
+#hewan-gambar img {
+    margin-top: 20px;
+    width: 180px;
+    border-radius: 16px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.13);
+}
+
+#zaman-info {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #24511c;
+}
+
+.cards-row {
+    display: flex;
+    gap: 48px;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-pilihan {
+    border-radius: 18px;
+    width: 280px;
+    padding: 32px 24px 28px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition:
+        box-shadow 0.2s,
+        background 0.2s,
+        transform 0.15s;
+    cursor: pointer;
+}
+
+.card-pilihan.laut {
+    background: linear-gradient(135deg, #1e3a5f 80%, #2e6fa3 100%);
+    box-shadow: 0 4px 18px 0 rgba(30, 58, 95, 0.13), 0 1.5px 6px 0 rgba(30, 58, 95, 0.09);
+}
+
+.card-pilihan.laut:hover {
+    background: linear-gradient(135deg, #2e6fa3 80%, #1e3a5f 100%);
+    box-shadow: 0 8px 28px 0 rgba(30, 58, 95, 0.18), 0 2px 8px 0 rgba(30, 58, 95, 0.13);
+    transform: translateY(-6px) scale(1.03);
+}
+
+.card-pilihan.laut:active {
+    background: #2e6fa3;
+    box-shadow: 0 2px 8px 0 rgba(30, 58, 95, 0.10);
+    transform: scale(0.98);
+}
+
+.card-pilihan.darat {
+    background: linear-gradient(135deg, #274312 80%, #4e7d3a 100%);
+    box-shadow: 0 4px 18px 0 rgba(39, 67, 18, 0.13), 0 1.5px 6px 0 rgba(39, 67, 18, 0.09);
+}
+
+.card-pilihan.darat:hover {
+    background: linear-gradient(135deg, #4e7d3a 80%, #274312 100%);
+    box-shadow: 0 8px 28px 0 rgba(39, 67, 18, 0.18), 0 2px 8px 0 rgba(39, 67, 18, 0.13);
+    transform: translateY(-6px) scale(1.03);
+}
+
+.card-pilihan.darat:active {
+    background: #4e7d3a;
+    box-shadow: 0 2px 8px 0 rgba(39, 67, 18, 0.10);
+    transform: scale(0.98);
+}
+
+.card-pilihan img {
+    width: 120px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+}
+
+.btn {
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 255, 255, 0.92);
+    color: #1e3a5f;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+    box-shadow: 0 4px 16px 0 rgba(20, 60, 20, 0.12), 0 1.5px 6px 0 rgba(0, 0, 0, 0.10);
+    margin-top: 18px;
+    font-weight: bold;
+}
+
+.btn.darat {
+    color: #274312;
+}
+
+.btn:hover {
+    background: #fff;
+    color: #173e71;
+}
+
+@media (max-width: 800px) {
+    .cards-row {
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .timeline-section {
+        max-width: 98vw;
+    }
+}
+
+
+.breadcrumb {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #3b3b3b;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: #35783b;
+    font-weight: 500;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb .current {
+    font-weight: bold;
+    color: #1b3d1b;
+}
+
