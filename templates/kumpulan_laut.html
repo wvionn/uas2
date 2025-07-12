@@ -3,34 +3,50 @@
 {% block content %}
 <!-- Form pencarian di kiri atas -->
 <div style="position: absolute; top: 5px; left: 32px; z-index: 10;">
-    <form action="{{ url_for('views.profile') }}" method="get"
-        style="display: flex; align-items: center; background: #eaf6fb; border-radius: 32px; box-shadow: 0 2px 12px rgba(30,58,95,0.10); padding: 6px 16px; transition: box-shadow 0.2s;">
-        <span style="display: flex; align-items: center; margin-right: 8px; color: #2176ae; font-size: 1.3rem;">
-            <!-- SVG ikon kaca pembesar -->
+    <form onsubmit="return false;"
+        style="display: flex; align-items: center; background: #fff; border-radius: 32px; box-shadow: 0 2px 12px rgba(39,67,18,0.10); padding: 6px 16px; transition: box-shadow 0.2s;">
+        <span style="display: flex; align-items: center; margin-right: 8px; color: #6c8b5b; font-size: 1.3rem;">
             <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="7" />
                 <line x1="16.5" y1="16.5" x2="21" y2="21" />
             </svg>
         </span>
-        <input type="text" name="q" placeholder="Cari hewan purba laut..."
-            style="border: none; outline: none; background: transparent; font-size: 1rem; padding: 8px 4px; width: 180px; color: #2176ae;">
-        <button type="submit"
-            style="background: linear-gradient(90deg, #2176ae 60%, #7fd8f6 100%); color: #fff; border: none; border-radius: 24px; padding: 8px 18px; margin-left: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; box-shadow: 0 2px 8px rgba(33,118,174,0.10); transition: background 0.2s;">
+        <input id="search-bar" type="text" name="q" autocomplete="off" placeholder="Cari hewan purba..."
+            style="border: none; outline: none; background: transparent; font-size: 1rem; padding: 8px 4px; width: 180px; color: #2d3a23;">
+        <button type="button" onclick="doSearch()"
+            style="background: linear-gradient(90deg, #6c8b5b 60%, #b6e2a1 100%); color: #fff; border: none; border-radius: 24px; padding: 8px 18px; margin-left: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; box-shadow: 0 2px 8px rgba(108,139,91,0.10); transition: background 0.2s;">
             Cari
         </button>
     </form>
+    <ul id="autocomplete-list"
+        style="position:absolute; left:0; top:44px; background:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); list-style:none; margin:0; padding:0; z-index:99; width:260px; display:none;">
+    </ul>
 </div>
-
-<!-- Hasil pencarian -->
-{% if hasil %}
-<div style="margin:32px 0 24px 0; padding:24px; background:#eaf6fb; border-radius:16px; max-width:400px;">
-    <img src="{{ url_for('static', filename=hasil.gambar) }}" alt="{{ hasil.nama }}"
-        style="max-width:100%; border-radius:12px;">
-    <h2 style="margin-top:12px;">{{ hasil.nama }}</h2>
-    <p>{{ hasil.detail }}</p>
-</div>
-{% endif %}
-
+<nav id="breadcrumbs" style="font-size:1rem; position:absolute; top:24px; right:32px; color:#2176ae; text-align:right; z-index:10; line-height:1.7;">
+    <div>
+        <span id="bc-home" style="cursor:pointer; text-decoration:underline;">Beranda</span> &gt; 
+        <span id="bc-hewan" style="cursor:pointer; text-decoration:underline;">Hewan Purba</span>
+    </div>
+    <div>
+        <span id="bc-kumpulan" style="cursor:pointer; text-decoration:underline;">Kumpulan Hewan Purba Laut</span>
+        <span id="bc-detail" style="display:none;"> &gt; <span id="bc-nama"></span></span>
+    </div>
+</nav>
+{% block styles %}
+<style>
+    body.laut {
+        background: linear-gradient(120deg, #e8f5e9 0%, #c8e6c9 100%);
+        background: url('/static/bglaut.png');
+        /* atau pakai gambar: background: url('/static/bg_darat.jpg') no-repeat center center fixed; */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        /* biar 1 layar penuh */
+        margin: 0;
+    }
+</style>
+{% endblock %}
 <h1 style="
     text-align: center;
     font-size: 3rem;
@@ -111,42 +127,29 @@
     mangsa kecil.']
     ] %}
     {% for nama, gambar, detail in cards %}
-    <div onclick="showDetail('{{ nama }}', '{{ gambar }}', `{{ detail }}`)"
-        style="cursor:pointer; background: #f5fcff; border-radius: 16px; box-shadow: 0 4px 16px rgba(33,120,200,0.13); width: 220px; padding: 18px; display: flex; flex-direction: column; align-items: center;">
-        <img src="{{ url_for('static', filename=gambar) }}" alt="{{ nama }}"
-            style="max-width: 90%; border-radius: 12px;">
-        <div class="nama-hewan laut" style="margin-top: 10px;">{{ nama }}</div>
-        <p style="margin-top: 8px; text-align: center;">{{ detail|safe }}</p>
+        <div class="card-item" data-nama="{{ nama|lower }}" onclick="showDetail('{{ nama }}', '{{ gambar }}')"
+            style="cursor:pointer; background: #f7fff7; border-radius: 16px; box-shadow: 0 4px 16px rgba(39,67,18,0.13); width: 220px; padding: 18px; display: flex; flex-direction: column; align-items: center;">
+            <img src="{{ url_for('static', filename=gambar) }}" alt="{{ nama }}"
+                style="max-width: 90%; border-radius: 12px;">
+            <div class="nama-hewan laut" style="margin-top: 10px;">{{ nama }}</div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
-<div id="detail-panel"
-    style="flex:1; min-width:500px; max-width:900px; background:#eaf6fb; border-radius:16px; box-shadow:0 4px 16px rgba(33,120,200,0.13); padding:32px; margin:32px auto 0 auto; display:none; position:relative;">
-    <button onclick="closeDetail()"
-        style="position:absolute; top:16px; right:16px; background:transparent; border:none; font-size:2rem; cursor:pointer;">&times;</button>
-    <div style="display: flex; gap: 32px; align-items: flex-start;">
-        <img id="detail-img" src="" alt="" style="max-width:260px; border-radius:12px; flex-shrink:0;">
-        <div>
-            <h2 id="detail-title" style="margin-top:0;"></h2>
-            <p id="detail-desc"></p>
+    <!-- Detail Panel -->
+    <div id="detail-panel"
+        style="flex:1; min-width:500px; max-width:900px; background:#f7fff7; border-radius:16px; box-shadow:0 4px 16px rgba(39,67,18,0.13); padding:32px; margin-left:16px; display:none; position:relative;">
+        <button onclick="closeDetail()"
+            style="position:absolute; top:16px; right:16px; background:transparent; border:none; font-size:2rem; cursor:pointer;">&times;</button>
+        <div style="display: flex; gap: 32px; align-items: flex-start;">
+            <img id="detail-img" src="" alt="" style="max-width:260px; border-radius:12px; flex-shrink:0;">
+            <div style="display: flex; flex-direction: column; align-items: flex-start; min-width:220px;">
+                <h2 id="detail-title" style="margin-top:0; margin-bottom:12px; text-align:left;"></h2>
+                <div id="detail-extra" style="color:#2d3a23; font-size:1.08rem; text-align:left;"></div>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    function showDetail(nama, gambar, detail) {
-        document.getElementById('cards-container').style.display = 'none';
-        const panel = document.getElementById('detail-panel');
-        panel.style.display = 'block';
-        document.getElementById('detail-img').src = '/static/' + gambar;
-        document.getElementById('detail-img').alt = nama;
-        document.getElementById('detail-title').innerText = nama;
-        document.getElementById('detail-desc').innerHTML = detail;
-    }
-
-    function closeDetail() {
-        document.getElementById('detail-panel').style.display = 'none';
-        document.getElementById('cards-container').style.display = 'flex';
-    }
-</script>
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/pencarian_laut.js') }}"></script>
+{% endblock %}
 {% endblock %}

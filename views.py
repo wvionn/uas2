@@ -47,3 +47,8 @@ def kumpulan_darat():
 def kumpulan_laut():
     # tampilkan halaman kumpulan hewan purba laut
     return render_template('kumpulan_laut.html')
+
+@views.route('/minigame')
+def minigame():
+    # tampilkan halaman 
+    return render_template('minigame.html')

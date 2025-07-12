@@ -136,12 +136,20 @@ body {
 }
 
 body.darat {
-    background: url('/static/bgdarat.png') no-repeat center center fixed;
-    background-size: cover;
+  background-image: url('bgdarat.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh; /* biar 1 layar penuh */
+  margin: 0;
 }
 body.laut {
-    background: url('/static/bglaut.png') no-repeat center center fixed;
-    background-size: cover;
+  background-image: url('bglaut.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh; /* biar 1 layar penuh */
+  margin: 0;
 }
 
 
